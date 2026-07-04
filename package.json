@@ -1,0 +1,19 @@
+{
+  "name": "devflow-eve-agent",
+  "version": "0.1.0",
+  "private": true,
+  "description": "DevFlow code-generation agents on Vercel Eve (Hybrid migration target — see devflow-backend/docs/architecture/EVE_MIGRATION.md)",
+  "type": "module",
+  "scripts": {
+    "dev": "eve dev",
+    "build": "eve build",
+    "deploy": "vercel deploy"
+  },
+  "dependencies": {
+    "eve": "latest",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3"
+  }
+}
