@@ -1,5 +1,21 @@
 import { defineTool } from 'eve/tools';
 
+interface TypecheckInput {
+  files: Array<{ filePath: string; content: string }>;
+}
+
+function assertSafeWorkspacePath(filePath: string): void {
+  const segments = filePath.split(/[\\/]+/);
+  if (
+    filePath.length === 0 ||
+    filePath.startsWith('/') ||
+    /^[A-Za-z]:/.test(filePath) ||
+    segments.some((segment) => segment === '' || segment === '.' || segment === '..')
+  ) {
+    throw new Error(`Unsafe generated file path: ${filePath}`);
+  }
+}
+
 /**
  * Shared `typecheck` tool implementation. Eve subagents inherit nothing from the root or each
  * other, so each code subagent re-exports this from its own `tools/typecheck.ts`. Keeping the
@@ -30,16 +46,17 @@ export default defineTool({
     required: ['files'],
     additionalProperties: false
   },
-  async execute({ files }: { files: Array<{ filePath: string; content: string }> }, ctx) {
+  async execute({ files }: TypecheckInput, ctx) {
     const sandbox = await ctx.getSandbox();
     for (const file of files) {
-      await sandbox.writeFile(file.filePath, file.content);
+      assertSafeWorkspacePath(file.filePath);
+      await sandbox.writeTextFile({ path: file.filePath, content: file.content });
     }
-    const result = await sandbox.bash(
-      'npx --yes typescript@5 tsc --noEmit --skipLibCheck --pretty false 2>&1 || true',
-    );
+    const result = await sandbox.run({
+      command: 'npx --yes --package typescript@5 tsc --noEmit --skipLibCheck --pretty false 2>&1 || true',
+    });
     const output = (result.stdout ?? '') + (result.stderr ?? '');
-    const errorLines = output.split('\n').filter((line) => /error TS\d+/.test(line));
+    const errorLines = output.split('\n').filter((line: string) => /error TS\d+/.test(line));
     return {
       ok: errorLines.length === 0,
       errorCount: errorLines.length,

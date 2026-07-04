@@ -1,4 +1,5 @@
 import { defineAgent } from 'eve';
+import { getEveModel } from '../lib/env.js';
 
 /**
  * DevFlow agent runtime config.
@@ -12,5 +13,5 @@ import { defineAgent } from 'eve';
  * pipeline in the Hybrid strategy.
  */
 export default defineAgent({
-  model: process.env.EVE_MODEL ?? 'openai/gpt-5.4-mini',
+  model: getEveModel(),
 });

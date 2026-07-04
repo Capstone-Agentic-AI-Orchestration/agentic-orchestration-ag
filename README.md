@@ -38,9 +38,13 @@ Subagents inherit nothing from the root, so each code subagent owns its `tools/t
 
 ## First run (Phase 0 spike)
 
+Requires Node.js 24 or newer. The installed Eve package (`0.13.8` in the current lockfile)
+will refuse to run on Node 22.
+
 ```bash
-cd devflow-eve-agent
+cd agentic-orchestration-ag
 npm install
+npm run typecheck
 npx eve dev          # starts a local dev server on :3000
 # smoke test the backend subagent:
 curl -X POST http://127.0.0.1:3000/eve/v1/session \

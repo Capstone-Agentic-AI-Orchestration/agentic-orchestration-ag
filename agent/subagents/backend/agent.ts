@@ -1,4 +1,5 @@
 import { defineAgent } from 'eve';
+import { getEveModel } from '../../../lib/env.js';
 
 /**
  * Backend code subagent. The directory name (`backend`) becomes the tool the parent/NestFlow
@@ -7,5 +8,5 @@ import { defineAgent } from 'eve';
  */
 export default defineAgent({
   description: 'Generates production-quality NestJS/TypeScript backend files from a DevFlow contract.',
-  model: process.env.EVE_MODEL ?? 'openai/gpt-5.4-mini',
+  model: getEveModel(),
 });
