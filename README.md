@@ -1,11 +1,13 @@
-# devflow-eve-agent
+# agentic-orchestration-ag
 
-The Vercel [Eve](https://vercel.com/docs/eve) agent that performs DevFlow's LLM code-generation
-turns. It is the **Hybrid** migration target: `devflow-backend` (NestJS, on Render) keeps the
-deterministic pipeline, gates, RAG, validation, and GitHub commit, and calls this service per
-agent turn over HTTP.
+The Vercel [Eve](https://vercel.com/docs/eve) agent that performs Agentic Orchestration's
+LLM code-generation turns. It is the **Hybrid** execution service:
+`agentic-orchestration-be` keeps the deterministic pipeline, gates, persistence, validation,
+and delivery, then calls this service per agent turn over HTTP.
 
-See the full plan: `../devflow-backend/docs/architecture/EVE_MIGRATION.md`.
+The frontend never calls this service directly. The backend starts project runs through
+`POST /projects/:id/orchestration/start`, stores run state, and calls this Eve service from
+its provider layer when `ORCHESTRATION_LLM_ENGINE=eve` and `EVE_SERVICE_URL` are configured.
 
 ## Layout
 
@@ -52,11 +54,25 @@ curl -X POST http://127.0.0.1:3000/eve/v1/session \
   -d '{"agent":"backend","message":"<contract JSON here>"}'
 ```
 
+To test the same bearer-token path the NestJS backend uses, set the same shared secret in
+both processes:
+
+```bash
+EVE_SERVICE_TOKEN=dev-local-token npx eve dev
+curl -X POST http://127.0.0.1:3000/eve/v1/session \
+  -H 'content-type: application/json' \
+  -H 'authorization: Bearer dev-local-token' \
+  -d '{"agent":"backend","message":"<contract JSON here>"}'
+```
+
 ## Deploy
 
 ```bash
-vercel deploy        # then set EVE_SERVICE_URL + EVE_SERVICE_TOKEN on the NestJS service
+vercel deploy        # then set EVE_SERVICE_URL + EVE_SERVICE_TOKEN on devflow-backend
 ```
+
+`EVE_SERVICE_TOKEN` is an app-defined shared secret, not a token issued by Eve. Generate a
+long random value and set it on both the deployed Eve service and `devflow-backend`.
 
 > Eve is in public beta (launched 2026-06-17). If the SDK surface differs from what is
 > scaffolded here, adjust `defineAgent`/`defineSubagent`/`defineTool` imports to match the

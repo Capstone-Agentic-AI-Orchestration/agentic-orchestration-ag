@@ -22,7 +22,7 @@ function assertSafeWorkspacePath(filePath: string): void {
  * logic in one module here (outside `agent/`, so it is not itself auto-discovered) avoids drift.
  *
  * Writes generated TypeScript to the sandbox and runs `tsc --noEmit`, returning diagnostics —
- * the real upgrade over devflow-backend's static typescript.program.checker.ts.
+ * the real upgrade over the backend's static TypeScript program checker.
  */
 export default defineTool({
   description: 'Writes generated TypeScript files to the sandbox and runs `tsc --noEmit`, returning diagnostics.',
