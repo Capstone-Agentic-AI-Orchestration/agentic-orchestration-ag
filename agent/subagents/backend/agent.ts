@@ -7,5 +7,5 @@ import { getEveModel } from '../../../lib/env.js';
  */
 export default defineAgent({
   description: 'Generates production-quality NestJS/TypeScript backend files from an orchestration contract.',
-  model: getEveModel(),
+  model: getEveModel('backend'),
 });

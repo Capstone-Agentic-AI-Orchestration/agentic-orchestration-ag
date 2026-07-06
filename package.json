@@ -11,7 +11,8 @@
     "dev": "eve dev",
     "build": "eve build",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "node scripts/verify-contract-fixtures.mjs",
+    "test": "node scripts/verify-contract-fixtures.mjs && node scripts/run-eve-hardening-smoke.mjs",
+    "test:eve-hardening": "node scripts/run-eve-hardening-smoke.mjs",
     "deploy": "vercel deploy"
   },
   "dependencies": {
