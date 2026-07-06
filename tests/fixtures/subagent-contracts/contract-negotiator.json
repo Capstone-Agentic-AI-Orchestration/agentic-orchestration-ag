@@ -1,5 +1,6 @@
 {
-  "architecture": "Single Next.js application with NestJS API boundary.",
-  "deliverables": ["frontend", "backend", "database"],
+  "projectName": "Acme Landing Page",
+  "description": "Single Next.js application with a NestJS API boundary.",
+  "fileManifest": ["frontend/src/app/page.tsx", "backend/src/app.controller.ts", "database/schema.prisma"],
   "acceptanceCriteria": ["Generated files are syntactically valid"]
 }

@@ -1,11 +1,58 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
+import { z } from 'zod';
 
 const root = process.cwd();
 const fixturesDir = resolve(root, 'tests/fixtures/subagent-contracts');
 
 const codeAgents = new Set(['architecture', 'backend', 'database', 'frontend']);
 const objectAgents = new Set(['contract-negotiator', 'requirements-parser', 'self-critique']);
+const languageSchema = z.enum(['typescript', 'javascript', 'json', 'sql', 'prisma', 'markdown', 'css', 'html']);
+const safePathSchema = z.string().min(1).refine((filePath) => {
+  const segments = filePath.split(/[\\/]+/);
+  return !filePath.startsWith('/') &&
+    !/^[A-Za-z]:/.test(filePath) &&
+    !segments.some((segment) => segment === '' || segment === '.' || segment === '..');
+}, 'must be a safe relative path');
+const codeArtifactSchema = z.object({
+  filePath: safePathSchema,
+  content: z.string().min(1),
+  language: languageSchema,
+}).strict();
+const schemas = {
+  architecture: z.array(codeArtifactSchema.extend({ language: z.literal('markdown') })).nonempty(),
+  backend: z.array(codeArtifactSchema).nonempty(),
+  database: z.array(codeArtifactSchema).nonempty(),
+  frontend: z.array(codeArtifactSchema).nonempty(),
+  'requirements-parser': z.object({
+    projectType: z.string().min(1),
+    features: z.array(z.string().min(1)).nonempty(),
+    techStack: z.object({
+      frontend: z.string().min(1),
+      backend: z.string().min(1),
+      database: z.string().min(1),
+      styling: z.string().min(1),
+    }).strict(),
+    complexity: z.enum(['simple', 'medium', 'complex']),
+    estimatedFiles: z.number().int().positive(),
+  }).strict(),
+  'contract-negotiator': z.object({
+    projectName: z.string().min(1),
+    description: z.string().min(1),
+    fileManifest: z.array(safePathSchema).nonempty(),
+    acceptanceCriteria: z.array(z.string().min(1)).nonempty(),
+  }).strict(),
+  'self-critique': z.object({
+    passed: z.boolean(),
+    feedback: z.string(),
+    perAgent: z.object({
+      frontend: z.string().optional(),
+      backend: z.string().optional(),
+      database: z.string().optional(),
+      architecture: z.string().optional(),
+    }).strict(),
+  }).strict(),
+};
 
 function fail(message) {
   console.error(message);
@@ -16,22 +63,13 @@ function readJson(path) {
   return JSON.parse(readFileSync(path, 'utf8'));
 }
 
-function assertCodeArtifact(agent, artifact, index) {
-  const prefix = `${agent}[${index}]`;
-  if (!artifact || typeof artifact !== 'object' || Array.isArray(artifact)) {
-    fail(`${prefix} must be an object.`);
-    return;
-  }
-  for (const key of ['filePath', 'content', 'language']) {
-    if (typeof artifact[key] !== 'string' || artifact[key].trim().length === 0) {
-      fail(`${prefix}.${key} must be a non-empty string.`);
+function assertNoDuplicatePaths(agent, artifacts) {
+  const seen = new Set();
+  for (const artifact of artifacts) {
+    if (seen.has(artifact.filePath)) {
+      fail(`${agent} has duplicate filePath: ${artifact.filePath}`);
     }
-  }
-}
-
-function assertObject(agent, value) {
-  if (!value || typeof value !== 'object' || Array.isArray(value)) {
-    fail(`${agent} must return one JSON object.`);
+    seen.add(artifact.filePath);
   }
 }
 
@@ -39,17 +77,14 @@ for (const fileName of readdirSync(fixturesDir).filter((file) => file.endsWith('
   const agent = fileName.replace(/\.json$/, '');
   const value = readJson(join(fixturesDir, fileName));
 
-  if (codeAgents.has(agent)) {
-    if (!Array.isArray(value) || value.length === 0) {
-      fail(`${agent} must return a non-empty array of generated artifacts.`);
+  const schema = schemas[agent];
+  if (schema) {
+    const result = schema.safeParse(value);
+    if (!result.success) {
+      fail(`${agent} fixture contract failed: ${result.error.issues.map((issue) => `${issue.path.join('.')}: ${issue.message}`).join('; ')}`);
       continue;
     }
-    value.forEach((artifact, index) => assertCodeArtifact(agent, artifact, index));
-    continue;
-  }
-
-  if (objectAgents.has(agent)) {
-    assertObject(agent, value);
+    if (codeAgents.has(agent)) assertNoDuplicatePaths(agent, result.data);
     continue;
   }
 
@@ -57,7 +92,7 @@ for (const fileName of readdirSync(fixturesDir).filter((file) => file.endsWith('
 }
 
 const typecheckTool = readFileSync(resolve(root, 'lib/typecheck-tool.ts'), 'utf8');
-for (const required of ['ok:', 'errorCount:', 'diagnostics:']) {
+for (const required of ['ok:', 'errorCount:', 'diagnostics:', 'EXIT_CODE_MARKER', 'MAX_TYPECHECK_FILES', 'MAX_TYPECHECK_BYTES']) {
   if (!typecheckTool.includes(required)) {
     fail(`typecheck tool result is missing ${required}`);
   }

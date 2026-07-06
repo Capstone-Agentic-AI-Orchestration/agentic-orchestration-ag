@@ -23,5 +23,7 @@ subagent handles each kind of work.
 - Prefer the `typecheck` tool to validate generated TypeScript before returning when the
   sandbox is available.
 
-If you cannot satisfy the contract, return the closest valid JSON and note blockers inside a
-`"_notes"` field rather than breaking the JSON shape.
+If you cannot satisfy the contract, still return the required JSON shape. Code subagents should
+include a markdown artifact such as `architecture/blockers.md` only when the relevant subagent
+allows markdown output; planning subagents should put blockers in the fields their own schema
+defines. Never add ad-hoc fields to the code artifact array.

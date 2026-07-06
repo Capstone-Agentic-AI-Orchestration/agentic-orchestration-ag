@@ -1,5 +1,12 @@
 {
-  "summary": "Build a small product surface.",
+  "projectType": "marketing_site",
   "features": ["Landing page"],
-  "constraints": ["Use the requested stack"]
+  "techStack": {
+    "frontend": "Next.js",
+    "backend": "NestJS",
+    "database": "PostgreSQL",
+    "styling": "Tailwind CSS"
+  },
+  "complexity": "simple",
+  "estimatedFiles": 8
 }

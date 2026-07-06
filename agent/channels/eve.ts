@@ -1,6 +1,6 @@
 import { eveChannel } from 'eve/channels/eve';
 import { extractBearerToken, localDev, placeholderAuth, type AuthFn } from 'eve/channels/auth';
-import { getEveServiceToken } from '../../lib/env.js';
+import { allowLocalDevAuth, getEveServiceToken } from '../../lib/env.js';
 
 const SERVICE_PRINCIPAL = 'devflow-backend';
 
@@ -36,7 +36,8 @@ function timingSafeEqual(actual: string, expected: string): boolean {
 
 function routeAuth(): readonly AuthFn<Request>[] {
   if (getEveServiceToken()) return [serviceTokenAuth];
-  return [localDev(), placeholderAuth()];
+  if (allowLocalDevAuth()) return [localDev(), placeholderAuth()];
+  return [() => null];
 }
 
 export default eveChannel({

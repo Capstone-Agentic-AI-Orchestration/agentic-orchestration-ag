@@ -11,3 +11,7 @@ export function getEveModel(): string {
 export function getEveServiceToken(): string {
   return process.env.EVE_SERVICE_TOKEN?.trim() ?? '';
 }
+
+export function allowLocalDevAuth(): boolean {
+  return process.env.EVE_ALLOW_LOCAL_DEV_AUTH === 'true';
+}
