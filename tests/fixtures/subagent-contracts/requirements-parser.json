@@ -1,0 +1,5 @@
+{
+  "summary": "Build a small product surface.",
+  "features": ["Landing page"],
+  "constraints": ["Use the requested stack"]
+}

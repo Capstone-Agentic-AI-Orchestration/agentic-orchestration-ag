@@ -1,0 +1,5 @@
+{
+  "architecture": "Single Next.js application with NestJS API boundary.",
+  "deliverables": ["frontend", "backend", "database"],
+  "acceptanceCriteria": ["Generated files are syntactically valid"]
+}

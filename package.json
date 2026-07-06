@@ -11,6 +11,7 @@
     "dev": "eve dev",
     "build": "eve build",
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node scripts/verify-contract-fixtures.mjs",
     "deploy": "vercel deploy"
   },
   "dependencies": {

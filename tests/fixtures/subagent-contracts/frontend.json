@@ -1,0 +1,7 @@
+[
+  {
+    "filePath": "frontend/app/page.tsx",
+    "content": "export default function Page() { return <main>Hello DevFlow</main>; }",
+    "language": "typescript"
+  }
+]

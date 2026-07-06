@@ -46,7 +46,9 @@ will refuse to run on Node 22.
 ```bash
 cd agentic-orchestration-ag
 npm install
+npm test
 npm run typecheck
+npm run build
 npx eve dev          # starts a local dev server on :3000
 # smoke test the backend subagent:
 curl -X POST http://127.0.0.1:3000/eve/v1/session \
@@ -69,6 +71,14 @@ curl -X POST http://127.0.0.1:3000/eve/v1/session \
 
 ```bash
 vercel deploy        # then set EVE_SERVICE_URL + EVE_SERVICE_TOKEN on devflow-backend
+```
+
+Before deploying, run:
+
+```bash
+npm test             # validates subagent JSON contract fixtures + typecheck result shape
+npm run typecheck    # validates TypeScript source
+npm run build        # validates Eve discovery/build output
 ```
 
 `EVE_SERVICE_TOKEN` is an app-defined shared secret, not a token issued by Eve. Generate a

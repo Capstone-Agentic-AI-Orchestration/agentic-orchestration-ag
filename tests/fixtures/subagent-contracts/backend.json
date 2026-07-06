@@ -1,0 +1,7 @@
+[
+  {
+    "filePath": "backend/src/app.controller.ts",
+    "content": "export class AppController {}",
+    "language": "typescript"
+  }
+]

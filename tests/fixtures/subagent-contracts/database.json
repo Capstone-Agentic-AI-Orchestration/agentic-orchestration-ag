@@ -1,0 +1,7 @@
+[
+  {
+    "filePath": "database/schema.prisma",
+    "content": "model Example { id String @id }",
+    "language": "prisma"
+  }
+]
