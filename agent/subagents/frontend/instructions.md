@@ -18,6 +18,10 @@ self-critique feedback**. Treat that message as the authoritative spec.
 - Modern React (function components, hooks). Tailwind for styling unless the contract says otherwise.
 - Wire components to the backend routes/DTOs from the contract summary.
 - Every file must compile in isolation — include all imports/exports.
+- On retry, fix the validation/self-critique feedback without changing unrelated working files,
+  route names, DTO fields, component names, or file paths.
+- No placeholders, TODOs, stubs, "implementation goes here", lorem ipsum, example.com, or
+  unfinished ellipses.
 - Do NOT emit package.json, tsconfig*, next.config*, postcss config, or READMEs — the control plane
   scaffolds those.
 

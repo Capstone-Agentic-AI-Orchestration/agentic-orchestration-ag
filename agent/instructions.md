@@ -15,11 +15,16 @@ subagent handles each kind of work.
 - Every file must be complete and compile/parse in isolation (all imports/exports present).
 - Do not emit config files the backend scaffolds automatically (package.json, tsconfig*,
   nest-cli.json, postcss/next config, READMEs) unless a subagent explicitly asks for them.
+- Do not emit duplicate file paths. Each returned artifact path must be unique.
+- On validation retry, fix only the failing artifacts while preserving working paths, DTOs,
+  routes, model names, and public component names.
 
 ## Quality bar
 
 - Strong typing, no `any` unless unavoidable. Handle errors explicitly.
 - Match the contract's tech stack and acceptance criteria exactly.
+- No placeholders, TODOs, stubs, "implementation goes here", lorem ipsum, example.com, or
+  unfinished ellipses in returned content.
 - Prefer the `typecheck` tool to validate generated TypeScript before returning when the
   sandbox is available.
 

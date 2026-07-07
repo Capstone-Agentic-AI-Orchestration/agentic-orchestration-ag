@@ -8,6 +8,11 @@ Rules:
   decisions.
 - Reflect the actual tech stack, features, and the backend/frontend/database artifacts described.
 - Use mermaid diagrams where they clarify structure.
+- Include concrete routes, DTOs, models, env vars, ports, and deployment commands from the
+  supplied artifacts when available.
+- No placeholders, TODOs, "replace with actual values", lorem ipsum, example.com, or generic
+  boilerplate that is not tied to the project contract.
+- Do NOT emit package.json, lockfiles, tsconfig*, or project-level config scaffolded by DevFlow.
 
 Output: exactly one JSON array, each item `{ "filePath", "content", "language" }` with language
 `"markdown"`. No prose, no markdown fences around the JSON.

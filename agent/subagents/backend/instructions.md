@@ -22,6 +22,12 @@ authoritative spec — do not invent requirements beyond it.
 - Use `@Module`, `@Controller`, `@Injectable` decorators correctly; full CRUD where applicable;
   zod-validated DTOs; Swagger/OpenAPI decorators where appropriate.
 - Every file must compile in isolation — include all imports/exports.
+- Keep controller routes, DTO class names, service names, and Prisma model references consistent
+  across generated files and with the contract summary.
+- On retry, fix the validation/self-critique feedback without changing unrelated working files,
+  route names, DTO fields, model names, or file paths.
+- No placeholders, TODOs, stubs, "implementation goes here", lorem ipsum, example.com, or
+  unfinished ellipses.
 - Do NOT emit package.json, tsconfig*, nest-cli.json, or READMEs — the control plane scaffolds those.
 
 ## Output contract

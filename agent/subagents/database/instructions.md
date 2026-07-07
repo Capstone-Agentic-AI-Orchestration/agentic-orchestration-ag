@@ -19,6 +19,11 @@ message as the authoritative spec.
 - Model the entities implied by the contract's features with correct relations, indexes, constraints.
 - Use Prisma schema syntax for schema files and standard SQL for migrations.
 - Keep names consistent with the backend DTOs/models from the contract summary.
+- On retry, fix the validation/self-critique feedback without changing unrelated working files,
+  model names, table names, relation names, or file paths.
+- No placeholders, TODOs, stubs, "implementation goes here", lorem ipsum, example.com, or
+  unfinished ellipses.
+- Do NOT emit package.json, lockfiles, tsconfig*, or project-level config scaffolded by DevFlow.
 
 ## Output contract
 Return **exactly one JSON array**, each item `{ "filePath": string, "content": string, "language": string }`.

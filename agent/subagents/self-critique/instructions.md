@@ -7,11 +7,13 @@ Return exactly one JSON object:
 
 ```
 {
-  "passed": boolean,
-  "feedback": string,
-  "perAgent": { "frontend"?: string, "backend"?: string, "database"?: string, "architecture"?: string }
+  "verdict": "pass" | "issues",
+  "issues": string[],
+  "suggestions": string[]
 }
 ```
 
-Flag missing files, contract mismatches, type errors, and unmet acceptance criteria. Keep
-feedback specific and actionable. No prose, no markdown fences.
+Flag missing files, duplicate file paths, scaffolded config files emitted by agents,
+contract mismatches, type errors, placeholders/stubs, and unmet acceptance criteria. Keep each
+issue specific and actionable with file paths and responsible agent names when possible. No prose,
+no markdown fences.
