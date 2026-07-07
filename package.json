@@ -10,10 +10,12 @@
   "scripts": {
     "dev": "eve dev",
     "build": "eve build",
+    "start": "eve start --host 0.0.0.0",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "node scripts/verify-contract-fixtures.mjs && node scripts/run-eve-hardening-smoke.mjs",
     "test:eve-hardening": "node scripts/run-eve-hardening-smoke.mjs",
-    "deploy": "vercel deploy"
+    "deploy": "eve deploy",
+    "deploy:vercel": "vercel deploy"
   },
   "dependencies": {
     "eve": "^0.13.8",

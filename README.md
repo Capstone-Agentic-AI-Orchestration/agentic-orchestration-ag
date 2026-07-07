@@ -67,11 +67,16 @@ curl -X POST http://127.0.0.1:3000/eve/v1/session \
   -d '{"agent":"backend","message":"<contract JSON here>"}'
 ```
 
-## Deploy
+## Deploy on Render
 
 ```bash
-vercel deploy        # then set EVE_SERVICE_URL + EVE_SERVICE_TOKEN on devflow-backend
+Build command: npm ci && npm test && npm run typecheck && npm run build
+Start command: npm run start
 ```
+
+Set the Render service to Node.js 24 or newer. After Render assigns the service URL, set
+`EVE_SERVICE_URL` on `agentic-orchestration-be` to that URL and set the same
+`EVE_SERVICE_TOKEN` value on both services.
 
 Before deploying, run:
 
@@ -82,7 +87,10 @@ npm run build        # validates Eve discovery/build output
 ```
 
 `EVE_SERVICE_TOKEN` is an app-defined shared secret, not a token issued by Eve. Generate a
-long random value and set it on both the deployed Eve service and `devflow-backend`.
+long random value and set it on both the deployed Eve service and `agentic-orchestration-be`.
+
+Vercel deployment remains available through `npm run deploy` or `npm run deploy:vercel`, but
+the active deployment runbook uses Render for this service.
 
 > Eve is in public beta (launched 2026-06-17). If the SDK surface differs from what is
 > scaffolded here, adjust `defineAgent`/`defineSubagent`/`defineTool` imports to match the
