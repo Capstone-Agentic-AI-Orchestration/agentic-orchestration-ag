@@ -15,4 +15,4 @@ Return exactly one JSON object with this shape:
 ```
 
 The `fileManifest` must be concrete, buildable paths consistent with the tech stack. The
-`acceptanceCriteria` must be testable. No prose, no markdown fences.
+`acceptanceCriteria` must be testable. Respect the locked intake, its explicit exclusions, source evidence, and unresolved questions supplied in the message. No prose, no markdown fences.
