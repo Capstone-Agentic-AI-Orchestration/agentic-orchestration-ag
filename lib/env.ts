@@ -11,6 +11,7 @@ export type EveModelTarget =
   | 'critique'
   | 'database'
   | 'frontend'
+  | 'mobile'
   | 'requirements';
 
 const TARGET_MODEL_ENV: Record<EveModelTarget, string> = {
@@ -20,6 +21,7 @@ const TARGET_MODEL_ENV: Record<EveModelTarget, string> = {
   critique: 'EVE_CRITIQUE_MODEL',
   database: 'EVE_DATABASE_MODEL',
   frontend: 'EVE_FRONTEND_MODEL',
+  mobile: 'EVE_MOBILE_MODEL',
   requirements: 'EVE_REQUIREMENTS_MODEL',
 };
 
